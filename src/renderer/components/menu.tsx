@@ -1,39 +1,42 @@
-import fs from 'fs'
+import React from 'react'
+import { Button, ButtonGroup, makeStyles, Theme } from '@material-ui/core'
+import { Save, FolderOpen, NoteAdd } from '@material-ui/icons'
 
-export enum FILE_EVENTS {
-  OPEN_DIALOG = 'open_dialog',
-  SAVE_DIALOG = 'save_dialog',
-  OPEN_FILE = 'open_file',
-  SAVE_FILE = 'save_file',
+const useStyles = makeStyles((theme: Theme) => ({
+  buttonWrp: {
+    margin: theme.spacing(2, 0, 3),
+  },
+  buttonIcon: {
+    marginLeft: theme.spacing(0.5),
+  },
+}))
+
+// ipcレンダラープロセスからのプロパティ―について定義
+interface MenuProps {
+  onFileOpen: () => void
+  onFileSave: () => void
+  onFileSaveAs: () => void
 }
 
-export const FILE_FILTERS: {
-  name: string
-  extensions: string[]
-}[] = [
-  { name: 'Text', extensions: ['txt'] },
-  { name: 'All Files', extensions: ['*'] },
-]
+const Menu: React.FC<MenuProps> = (props) => {
+  const classes = useStyles()
 
-export interface FileInfoType {
-  fileName: string
-  fileText: string
+  return (
+    <ButtonGroup variant='outlined' color='primary' className={classes.buttonWrp}>
+      <Button onClick={props.onFileOpen}>
+        OPEN
+        <FolderOpen className={classes.buttonIcon} />
+      </Button>
+      <Button onClick={props.onFileSave}>
+        SAVE
+        <Save className={classes.buttonIcon} />
+      </Button>
+      <Button onClick={props.onFileSaveAs}>
+        SAVE AS
+        <NoteAdd className={classes.buttonIcon} />
+      </Button>
+    </ButtonGroup>
+  )
 }
 
-export const readFile = (fileName: string): string => {
-  let fileText = ''
-  try {
-    fileText = fs.readFileSync(fileName, 'utf-8')
-  } catch (e) {
-    console.log(e)
-  }
-  return fileText
-}
-
-export const saveFile = (fileName: string, fileText: string): void => {
-  try {
-    fs.writeFileSync(fileName, fileText, 'UTF-8')
-  } catch (e) {
-    console.log(e)
-  }
-}
+export default Menu

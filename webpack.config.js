@@ -1,7 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path')
 
-// メインプロセスの設定
 const main = {
   mode: 'development',
   target: 'electron-main',
@@ -25,11 +24,10 @@ const main = {
     ],
   },
   resolve: {
-    extensions: ['.js', '.ts'],
+    extensions: ['.js', '.ts', '.json'],
   },
 }
 
-// レンダラープロセスの設定
 const renderer = {
   mode: 'development',
   target: 'electron-renderer',
@@ -45,8 +43,8 @@ const renderer = {
   module: {
     rules: [
       {
-        test: /\.(tsx|ts)$/,
-        use: ['ts-loader'],
+        test: /\.ts[x]?$/,
+        use: 'ts-loader',
         include: [path.resolve(__dirname, 'src'), path.resolve(__dirname, 'node_modules')],
       },
     ],
